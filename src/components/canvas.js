@@ -4,19 +4,23 @@ import PixiApp from "../lib/PixiApp"
 const Canvas = (props) => {
   const canavsRef = useRef(null)
 
-  const [app, setApp] = useState()
   const [fontIsLoaded, setFontLoad] = useState(false)
 
-  useEffect(() => {
-    const pixiApp = new PixiApp(canavsRef.current, {
-      resolution: window.devicePixelRatio || 1,
-      width: window.innerWidth,
-      height: window.innerHeight,
+  const app = props.state.pixiApp
+  const setPixiApp = props.state.setPixiApp
 
-      ...props.options,
-    })
-    setApp(pixiApp)
-  }, [props.options, setApp])
+  useEffect(() => {
+    if (!app) {
+      const pixiApp = new PixiApp(canavsRef.current, {
+        resolution: window.devicePixelRatio || 1,
+        width: window.innerWidth,
+        height: window.innerHeight,
+
+        ...props.options,
+      })
+      setPixiApp(pixiApp)
+    }
+  }, [setPixiApp, props.options, app])
 
   useEffect(() => {
     if (app) {
@@ -35,8 +39,8 @@ const Canvas = (props) => {
 
   useEffect(() => {
     if (fontIsLoaded) {
-      app.showText("Hello")
-      app.anime()
+      app.showText("Hello world")
+      app.fadeUpThemAll()
     }
   }, [fontIsLoaded, app])
 

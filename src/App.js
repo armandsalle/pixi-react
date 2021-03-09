@@ -1,7 +1,16 @@
+import { useState } from "react"
 import Canvas from "./components/canvas"
+import ControlPanel from "./components/controlPanel"
 
 const App = () => {
-  return <Canvas options={{ backgroundColor: 0xeef1f5 }} />
+  const [pixiApp, setPixiApp] = useState()
+
+  return (
+    <>
+      <ControlPanel state={{ pixiApp }} />
+      <Canvas options={{ backgroundColor: 0xeef1f5 }} state={{ pixiApp, setPixiApp }} />
+    </>
+  )
 }
 
 export default App
