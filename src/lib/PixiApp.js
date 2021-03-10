@@ -42,7 +42,7 @@ export default class PixiApp {
       const pLetter = new PIXI.Text(letter, {
         fontFamily: this.fonts,
         fontSize: fontSize || 100,
-        fill: 0xff1010,
+        fill: this.textColor || 0x000000,
         align: "center",
       })
 
@@ -50,7 +50,6 @@ export default class PixiApp {
 
       return pLetter
     })
-
     this.pixiLetters.forEach((letter, i) => {
       if (i > 0) {
         letter.x = this.pixiLetters[i - 1].width + this.pixiLetters[i - 1].x + 10
@@ -59,11 +58,15 @@ export default class PixiApp {
   }
 
   showText = (text, fontSize) => {
+    if (text) {
+      this.text = text
+    }
+
     this.app.stage.removeChild(this.container)
     this.container = new PIXI.Container()
     this.app.stage.addChild(this.container)
 
-    this.createSplitText(text, fontSize)
+    this.createSplitText(this.text, fontSize)
 
     // center the container
     this.container.pivot.set(this.container.width / 2, this.container.height / 2)
@@ -82,6 +85,15 @@ export default class PixiApp {
     this.fadeUpThemAll()
   }
 
+  updateTextColor = (newColor) => {
+    this.textColor = newColor
+    this.pixiLetters.forEach((letter) => (letter.style.fill = this.textColor))
+  }
+
+  updateTextFontSize = (newFontSize) => {
+    this.showText(null, newFontSize)
+  }
+
   destroy = () => {
     this.app.destroy()
   }
@@ -93,6 +105,12 @@ export default class PixiApp {
         duration: 500,
         loop: true,
         direction: "alternate",
+        autoplay: false,
+        update: () => {
+          if (this.progressBar) {
+            this.progressBar(this.tl.progress)
+          }
+        },
       })
       .add({
         targets: this.pixiLetters,

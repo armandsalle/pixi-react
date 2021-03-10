@@ -8,7 +8,7 @@ const App = () => {
   return (
     <>
       <ControlPanel state={{ pixiApp }} />
-      <Canvas options={{ backgroundColor: 0xeef1f5 }} state={{ pixiApp, setPixiApp }} />
+      <Canvas options={{ backgroundColor: 0xffffff }} state={{ pixiApp, setPixiApp }} />
     </>
   )
 }
