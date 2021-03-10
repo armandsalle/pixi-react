@@ -40,7 +40,6 @@ const Canvas = (props) => {
   useEffect(() => {
     if (fontIsLoaded) {
       app.showText("Hello world")
-      app.fadeUpThemAll()
     }
   }, [fontIsLoaded, app])
 

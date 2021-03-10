@@ -22,6 +22,7 @@ export default class PixiApp {
       backgroundAlpha: true,
       autoDensity: true,
       antialias: true,
+      resizeTo: window,
     })
   }
 
@@ -35,13 +36,8 @@ export default class PixiApp {
     return font.load()
   }
 
-  showText = (text, fontSize) => {
-    this.app.stage.removeChild(this.container)
-    this.container = new PIXI.Container()
-    this.app.stage.addChild(this.container)
-
+  createSplitText = (text, fontSize) => {
     const letters = text.split("")
-
     this.pixiLetters = letters.map((letter) => {
       const pLetter = new PIXI.Text(letter, {
         fontFamily: this.fonts,
@@ -49,6 +45,7 @@ export default class PixiApp {
         fill: 0xff1010,
         align: "center",
       })
+
       this.container.addChild(pLetter)
 
       return pLetter
@@ -58,17 +55,22 @@ export default class PixiApp {
       if (i > 0) {
         letter.x = this.pixiLetters[i - 1].width + this.pixiLetters[i - 1].x + 10
       }
-
-      // const grid = new PIXI.Graphics()
-      // grid.lineStyle(2, 0xfeeb00, 1)
-      // grid.drawRect(letter.x, letter.y, letter.width, letter.height)
-      // this.container.addChild(grid)
     })
+  }
 
+  showText = (text, fontSize) => {
+    this.app.stage.removeChild(this.container)
+    this.container = new PIXI.Container()
+    this.app.stage.addChild(this.container)
+
+    this.createSplitText(text, fontSize)
+
+    // center the container
     this.container.pivot.set(this.container.width / 2, this.container.height / 2)
     this.container.x = this.width / 2
     this.container.y = this.height / 2
 
+    // create a mask on the container
     const containerMask = new PIXI.Graphics()
     this.app.stage.addChild(containerMask)
     containerMask.x = this.container.x - this.container.width / 2
@@ -76,32 +78,17 @@ export default class PixiApp {
     containerMask.beginFill(0x000000)
     containerMask.drawRect(0, 0, this.container.width, this.container.height)
     this.container.mask = containerMask
+
+    this.fadeUpThemAll()
   }
 
   destroy = () => {
     this.app.destroy()
   }
 
-  // moveThemAll = () => {
-  //   const random = () => Math.floor(Math.random() * (100 - -100 + 1) + -100)
-  //   anime({
-  //     targets: this.pixiLetters,
-  //     x: (e) => {
-  //       return e.x + random()
-  //     },
-  //     y: (e) => {
-  //       return e.y + random()
-  //     },
-  //     delay: anime.stagger(100, { start: 500 }),
-  //   })
-  // }
-
   fadeUpThemAll = () => {
     this.tl = anime
       .timeline({
-        // complete: () => {
-        //   setTimeout(this.fadeUpThemAll, 500)
-        // },
         easing: "easeOutQuad",
         duration: 500,
         loop: true,

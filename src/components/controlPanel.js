@@ -9,7 +9,6 @@ const ControlPanel = ({ state }) => {
     setText(e.target.value)
     if (app) {
       app.showText(e.target.value)
-      app.fadeUpThemAll()
     }
   }
 
@@ -17,7 +16,6 @@ const ControlPanel = ({ state }) => {
     setFontSize(+e.target.value)
     if (app) {
       app.showText(text || "hello world", +e.target.value)
-      app.fadeUpThemAll()
     }
   }
 
